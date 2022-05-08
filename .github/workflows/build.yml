@@ -1,0 +1,20 @@
+name: build
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aminya/setup-cpp@v1
+        with:
+          cmake: true
+      - run: cmake . && cmake --build .
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "**/cfg-checker.exe"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: release
+          commit: main
